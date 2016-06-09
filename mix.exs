@@ -7,7 +7,7 @@ defmodule AliceTielursHeartRate.Mixfile do
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     description: "A handler for the Alice Slack bot. Allows Alice to checl Tielur's heart rate",
+     description: "A handler for the Alice Slack bot. Allows Alice to check Tielur's heart rate",
      package: package,
      deps: deps]
   end
