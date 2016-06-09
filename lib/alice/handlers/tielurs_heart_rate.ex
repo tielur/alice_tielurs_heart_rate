@@ -6,11 +6,10 @@ defmodule Alice.Handlers.TielursHeartRate do
   use Alice.Router
   use Timex
 
-  route ~r/(tielur|tielurs|tielur's) (heart|\:heart\:)/i,         :heart_rate
+  route ~r/(tielur|tielurs|tielur's) (heart|\:heart\:|[❤️💛💚💙💜❣️💕💓💗💖💘💝💟💔])/iu, :heart_rate
 
   def heart_rate(conn) do
-    conn
-    |> TielursHeartRate.measure
+    TielursHeartRate.measure
     |> List.first
     |> format_message
     |> reply(conn)
