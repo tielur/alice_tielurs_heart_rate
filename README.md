@@ -12,7 +12,7 @@ If [available in Hex](https://hex.pm/packages/alice_tielurs_heart_rate), the pac
   1. Add alice_tielurs_heart_rate to your list of dependencies in `mix.exs`:
 
         def deps do
-          [{:alice_tielurs_heart_rate, "~> 0.0.1"}]
+          [{:alice_tielurs_heart_rate, "~> 0.0.5"}]
         end
 
   2. Ensure alice_tielurs_heart_rate is started before your application:
