@@ -1,10 +1,8 @@
 defmodule TielursHeartRate do
   alias Alice.Conn
 
-  def measure(numberOfHeartRates \\ 1) do
-    http.get!("", [], [timeout: 30000, recv_timeout: 30000]).body
-    |> Enum.reverse
-    |> Enum.take(numberOfHeartRates)
+  def measure(timeout \\ 3000) do
+    http.get("", %{}, [timeout: timeout, recv_timeout: timeout])
   end
 
   defp http do

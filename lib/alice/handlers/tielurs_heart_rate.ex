@@ -10,9 +10,25 @@ defmodule Alice.Handlers.TielursHeartRate do
 
   def heart_rate(conn) do
     TielursHeartRate.measure
-    |> List.first
-    |> format_message
-    |> reply(conn)
+    |> case do
+      {:ok, response} ->
+        Enum.reverse(response.body)
+        |> Enum.take(1)
+        |> List.first
+        |> format_message
+        |> reply(conn)
+      {:error, _} ->
+        reply("Tielur is too cheap to pay $7 for heroku, so I have to wait for his rails server to respond...", conn)
+        TielursHeartRate.measure(30000)
+        |> case do
+          {:ok, response} ->
+            Enum.reverse(response.body)
+            |> Enum.take(1)
+            |> List.first
+            |> format_message
+            |> reply(conn)
+        end
+    end
   end
 
   def format_message(measurement) do
