@@ -8,6 +8,7 @@ defmodule Alice.Handlers.TielursHeartRate do
 
   route ~r/(tielur|tielurs|tielur's) (heart|\:heart\:|[❤️💛💚💙💜❣️💕💓💗💖💘💝💟💔])/iu, :heart_rate
 
+  @doc "`Tielur's heart rate` - Returns Tielur's latest heart rate"
   def heart_rate(conn, timeout \\ 1000) do
     timeout
     |> TielursHeartRate.measure
