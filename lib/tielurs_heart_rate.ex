@@ -1,8 +1,6 @@
 defmodule TielursHeartRate do
-  alias Alice.Conn
-
   def measure(timeout \\ 1000) do
-    http.get("", %{}, [timeout: timeout, recv_timeout: timeout])
+    http.get("", %{}, timeout: timeout, recv_timeout: timeout)
   end
 
   defp http do
@@ -11,5 +9,4 @@ defmodule TielursHeartRate do
       _     -> TielursHeartRate.Client
     end
   end
-
 end
