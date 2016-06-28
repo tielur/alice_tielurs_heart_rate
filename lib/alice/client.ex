@@ -1,5 +1,4 @@
 defmodule TielursHeartRate.Client do
-  
   @moduledoc """
   This is a client to access the tielurs-heart-rate json api over http
   See documentation for HTTPoison.Base for more information

@@ -8,36 +8,27 @@ defmodule Alice.Handlers.TielursHeartRate do
 
   route ~r/(tielur|tielurs|tielur's) (heart|\:heart\:|[❤️💛💚💙💜❣️💕💓💗💖💘💝💟💔])/iu, :heart_rate
 
-  def heart_rate(conn) do
-    TielursHeartRate.measure
-    |> case do
-      {:ok, response} ->
-        Enum.reverse(response.body)
-        |> Enum.take(1)
-        |> List.first
-        |> format_message
-        |> reply(conn)
-      {:error, _} ->
-        reply("Tielur is too cheap to pay $7 for heroku, so I have to wait for his rails server to respond...", conn)
-        TielursHeartRate.measure(30000)
-        |> case do
-          {:ok, response} ->
-            Enum.reverse(response.body)
-            |> Enum.take(1)
-            |> List.first
-            |> format_message
-            |> reply(conn)
-        end
-    end
+  def heart_rate(conn, timeout \\ 1000) do
+    timeout
+    |> TielursHeartRate.measure
+    |> handle_measurement(conn)
   end
 
-  def format_message(measurement) do
-    split_time = String.split(measurement.time, ":")
-    hours = String.to_integer(Enum.at(split_time, 0))
-    minutes = String.to_integer(Enum.at(split_time, 1))
-    seconds = String.to_integer(Enum.at(split_time, 2))
-    heart_rate_time = DateTime.set(DateTime.local, hour: hours, minute: minutes, second: seconds)
-    "Tielur's heart rate was #{measurement.value}BPM about #{Timex.from_now(heart_rate_time)}"
+  defp handle_measurement({:ok, %{body: body}}, conn) do
+    body
+    |> Enum.reverse
+    |> hd
+    |> format_message
+    |> reply(conn)
+  end
+  defp handle_measurement({:error, _}, conn) do
+    reply("Tielur is too cheap to pay $7 for heroku, so I have to wait for his rails server to respond...", conn)
+    heart_rate(30000, conn)
   end
 
+  defp format_message(%{time: time, value: value}) do
+    [hr, min, sec] = time |> String.split(":") |> Enum.map(&String.to_integer/1)
+    time = DateTime.local |> DateTime.set(hour: hr, minute: min, second: sec) |> Timex.from_now
+    "Tielur's heart rate was #{value}BPM about #{time}"
+  end
 end
